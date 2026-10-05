@@ -24,10 +24,7 @@
 
 **Visual Studio:** לפתוח את `Backend/Requests.sln` (ה-Startup Project הוא `Requests.Api`) ולהריץ עם F5 — נפתח ישירות ב-Swagger.
 
-**Command Line:**
-```bash
-dotnet run --project Backend/src/Requests.Api/Requests.Api.csproj
-```
+
 
 | שירות | Visual Studio (IIS Express) | Command Line |
 |---|---|---|
