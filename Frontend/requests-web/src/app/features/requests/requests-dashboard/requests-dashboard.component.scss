@@ -1,0 +1,126 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__error {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 10px;
+    color: #b91c1c;
+    background: #fdecec;
+    border: 1px solid #f7cdcd;
+  }
+
+  &__kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 12px;
+    box-shadow: var(--app-shadow-sm);
+  }
+
+  &__progress-head {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--app-text);
+  }
+
+  &__charts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  &__chart-card {
+    padding: 1.25rem;
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 12px;
+    box-shadow: var(--app-shadow-sm);
+  }
+
+  &__chart-title {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--app-text);
+  }
+
+  &__chart-hint {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--app-text-muted, #64748b);
+  }
+
+  &__chart {
+    block-size: 18rem;
+  }
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow-sm);
+
+  // Leading accent stripe per card.
+  border-inline-start: 4px solid var(--app-accent, #2563eb);
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--app-text-muted, #64748b);
+  }
+
+  &__value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--app-text);
+  }
+
+  &--open {
+    border-inline-start-color: #b45309;
+  }
+
+  &--closed {
+    border-inline-start-color: #15803d;
+  }
+
+  &--pct {
+    border-inline-start-color: #7c3aed;
+  }
+}
+
+@media (max-inline-size: 900px) {
+  .dashboard__kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard__charts {
+    grid-template-columns: 1fr;
+  }
+}

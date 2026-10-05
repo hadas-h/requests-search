@@ -1,0 +1,61 @@
+<section class="search-page">
+  <!-- Filter form card: always available so the user can search regardless of state. -->
+  <div class="search-card search-card--filter">
+    <app-filter-form (filterChange)="onFilterChange($event)" />
+  </div>
+
+  <!-- State region: announces changes politely and reserves space so the layout never jumps. -->
+  <div class="search-card search-page__state" aria-live="polite" aria-busy="{{ isLoading() }}">
+    @switch (store.status()) {
+      @case ('error') {
+        <div class="search-page__error" role="alert">
+          <i class="pi pi-exclamation-triangle search-page__state-icon" aria-hidden="true"></i>
+          <p class="search-page__message">{{ 'State.error' | translate }}</p>
+          <p-button
+            type="button"
+            icon="pi pi-refresh"
+            [label]="'State.retry' | translate"
+            (onClick)="store.retry()"
+          />
+        </div>
+      }
+      @default {
+        @if (store.isEmpty()) {
+          <div class="search-page__empty">
+            <i class="pi pi-inbox search-page__state-icon" aria-hidden="true"></i>
+            <p class="search-page__message">{{ 'State.empty' | translate }}</p>
+          </div>
+        } @else if (hasResults()) {
+          <!-- Results stay mounted during load-more/refresh; a non-blocking overlay conveys
+               progress without collapsing the layout. -->
+          <div class="search-page__results">
+            <app-results-table
+              [items]="store.items()"
+              [hasMore]="store.hasMore()"
+              [loading]="isLoading()"
+              [sortBy]="sortBy()"
+              [sortDirection]="sortDirection()"
+              (sortChange)="onSortChange($event)"
+              (loadMore)="onLoadMore()"
+            />
+            @if (isLoading()) {
+              <div class="search-page__overlay" aria-hidden="true">
+                <p-progressSpinner strokeWidth="4" />
+              </div>
+            }
+          </div>
+        } @else if (isLoading()) {
+          <!-- Initial load with no prior results: skeleton rows reserve the table's space. -->
+          <div class="search-page__loading">
+            @for (row of skeletonRows; track row) {
+              <p-skeleton height="2.75rem" class="search-page__skeleton-row" />
+            }
+            <p class="search-page__message search-page__loading-caption">
+              {{ 'State.loading' | translate }}
+            </p>
+          </div>
+        }
+      }
+    }
+  </div>
+</section>

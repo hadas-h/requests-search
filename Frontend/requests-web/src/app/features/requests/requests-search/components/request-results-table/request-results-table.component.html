@@ -1,0 +1,48 @@
+<div class="results-table">
+  <p-table
+    [value]="items()"
+    [rowTrackBy]="trackById"
+    styleClass="p-datatable-sm"
+    [scrollable]="true"
+    [tableStyle]="{ 'min-inline-size': '40rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        @for (column of columns; track column.field) {
+          <th scope="col" [attr.aria-sort]="ariaSort(column.field)">
+            <button
+              type="button"
+              class="results-table__sort"
+              [attr.aria-label]="(column.labelKey | translate) + ' — ' + ('Sort.sortBy' | translate)"
+              (click)="onSort(column.field)"
+            >
+              <span>{{ column.labelKey | translate }}</span>
+              <i class="results-table__sort-icon" [ngClass]="sortIcon(column.field)" aria-hidden="true"></i>
+            </button>
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-request>
+      <tr>
+        <td>{{ request.requestNumber }}</td>
+        <td><app-status-badge [status]="request.status.name" /></td>
+        <td>{{ 'RequestType.' + request.requestType.name | translate }}</td>
+        <td>{{ request.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  @if (hasMore()) {
+    <div class="results-table__load-more">
+      <p-button
+        type="button"
+        [label]="'State.loadMore' | translate"
+        [loading]="loading()"
+        [disabled]="loading()"
+        (onClick)="onLoadMore()"
+      />
+    </div>
+  }
+</div>

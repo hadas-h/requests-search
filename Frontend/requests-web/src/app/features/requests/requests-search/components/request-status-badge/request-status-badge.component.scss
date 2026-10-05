@@ -1,0 +1,46 @@
+// Vibrant status pill: soft tinted background, saturated text/icon, subtle ring.
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: 0.28rem;
+  padding-inline: 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid transparent;
+
+  &__icon {
+    font-size: 0.85rem;
+  }
+
+  // New — blue
+  &--new {
+    color: #1d4ed8;
+    background: #e6efff;
+    border-color: #c7dbff;
+  }
+
+  // InProgress — amber
+  &--inprogress {
+    color: #b45309;
+    background: #fff3e0;
+    border-color: #ffe0b2;
+  }
+
+  // Completed — green
+  &--completed {
+    color: #15803d;
+    background: #e6f7ec;
+    border-color: #c3ecd1;
+  }
+
+  // Cancelled — red
+  &--cancelled {
+    color: #b91c1c;
+    background: #fdECEC;
+    border-color: #f7cdcd;
+  }
+}

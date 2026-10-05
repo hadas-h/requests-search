@@ -1,0 +1,30 @@
+<header class="app-header">
+  <h1>{{ titleKey() | translate }}</h1>
+
+  @if (isAuthenticated()) {
+    <div class="app-header__user">
+      <span class="app-header__greeting">
+        {{ 'Auth.greeting' | translate }} {{ user()?.username }}
+      </span>
+      <p-button
+        type="button"
+        severity="secondary"
+        [text]="true"
+        icon="pi pi-sign-out"
+        [label]="'Auth.logout' | translate"
+        (onClick)="logout()"
+      />
+    </div>
+  }
+
+  @if (isAdministrator()) {
+    <p class="app-header__admin-note" role="note">
+      <i class="pi pi-shield" aria-hidden="true"></i>
+      <span>{{ 'Auth.adminNotice' | translate }}</span>
+    </p>
+  }
+</header>
+
+<main class="app-main">
+  <router-outlet />
+</main>

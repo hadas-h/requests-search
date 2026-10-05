@@ -1,0 +1,85 @@
+<form class="filter-form" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="filter-form__field">
+    <label class="filter-form__label" for="requestNumber">{{ 'Filter.requestNumber' | translate }}</label>
+    <input
+      id="requestNumber"
+      type="text"
+      pInputText
+      formControlName="requestNumber"
+      [attr.aria-label]="'Filter.requestNumber' | translate"
+    />
+  </div>
+
+  <div class="filter-form__field">
+    <label class="filter-form__label" for="statuses">{{ 'Filter.status' | translate }}</label>
+    <p-multiSelect
+      inputId="statuses"
+      formControlName="statuses"
+      [options]="statusOptions"
+      optionValue="value"
+      [ariaLabel]="'Filter.status' | translate"
+    >
+      <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+      <ng-template let-selected pTemplate="selectedItems">
+        @for (item of selected; track item) {
+          <span class="filter-form__tag">{{ 'Status.' + item | translate }}</span>
+        }
+      </ng-template>
+    </p-multiSelect>
+  </div>
+
+  <div class="filter-form__field">
+    <label class="filter-form__label" for="requestType">{{ 'Filter.requestType' | translate }}</label>
+    <p-select
+      inputId="requestType"
+      formControlName="requestType"
+      [options]="requestTypeOptions"
+      optionValue="value"
+      [showClear]="true"
+      [ariaLabel]="'Filter.requestType' | translate"
+    >
+      <ng-template let-option pTemplate="item">{{ option.labelKey | translate }}</ng-template>
+      <ng-template let-selected pTemplate="selectedItem">{{ 'RequestType.' + selected.value | translate }}</ng-template>
+    </p-select>
+  </div>
+
+  <div class="filter-form__field">
+    <label class="filter-form__label" for="createdFrom">{{ 'Filter.createdFrom' | translate }}</label>
+    <p-datePicker
+      inputId="createdFrom"
+      formControlName="createdFrom"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      [ariaLabel]="'Filter.createdFrom' | translate"
+    />
+  </div>
+
+  <div class="filter-form__field">
+    <label class="filter-form__label" for="createdTo">{{ 'Filter.createdTo' | translate }}</label>
+    <p-datePicker
+      inputId="createdTo"
+      formControlName="createdTo"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      [ariaLabel]="'Filter.createdTo' | translate"
+    />
+  </div>
+
+  @if (hasDateRangeError) {
+    <p class="filter-form__error" role="alert">{{ 'Filter.dateRangeInvalid' | translate }}</p>
+  }
+
+  <div class="filter-form__actions">
+    <p-button
+      type="submit"
+      [label]="'Filter.search' | translate"
+      [disabled]="hasDateRangeError"
+    />
+    <p-button
+      type="button"
+      severity="secondary"
+      [label]="'Filter.clear' | translate"
+      (onClick)="clear()"
+    />
+  </div>
+</form>

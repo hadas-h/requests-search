@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <!-- WebApplicationFactory integration tests boot the ASP.NET Core host in-process, so the
+       test project needs the ASP.NET Core shared framework. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.19" />
+    <!-- End-to-end integration testing via WebApplicationFactory<Program> (R16.1-16.5).
+         Pinned to 8.0.x to match the .NET 8 / ASP.NET Core 8 target. -->
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Requests.Application\Requests.Application.csproj" />
+    <ProjectReference Include="..\..\src\Requests.Domain\Requests.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Requests.Infrastructure\Requests.Infrastructure.csproj" />
+    <!-- Reference the API host so Program (public partial) is visible to WebApplicationFactory. -->
+    <ProjectReference Include="..\..\src\Requests.Api\Requests.Api.csproj" />
+  </ItemGroup>
+</Project>

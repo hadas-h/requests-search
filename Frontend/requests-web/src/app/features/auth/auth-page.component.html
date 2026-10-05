@@ -1,0 +1,39 @@
+<section class="auth-page">
+  <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="auth-card__title">
+      {{ (isRegister() ? 'Auth.registerTitle' : 'Auth.loginTitle') | translate }}
+    </h1>
+
+    <label class="auth-card__field">
+      <span class="auth-card__label">{{ 'Auth.username' | translate }}</span>
+      <input pInputText formControlName="username" autocomplete="username" />
+    </label>
+
+    <label class="auth-card__field">
+      <span class="auth-card__label">{{ 'Auth.password' | translate }}</span>
+      <p-password
+        formControlName="password"
+        [feedback]="false"
+        [toggleMask]="true"
+        styleClass="auth-card__password"
+        inputStyleClass="auth-card__password-input"
+        autocomplete="current-password"
+      />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="auth-card__error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    <p-button
+      type="submit"
+      styleClass="auth-card__submit"
+      [label]="(isRegister() ? 'Auth.register' : 'Auth.login') | translate"
+      [loading]="submitting()"
+    />
+
+    <button type="button" class="auth-card__toggle" (click)="toggleMode()">
+      {{ (isRegister() ? 'Auth.toggleToLogin' : 'Auth.toggleToRegister') | translate }}
+    </button>
+  </form>
+</section>

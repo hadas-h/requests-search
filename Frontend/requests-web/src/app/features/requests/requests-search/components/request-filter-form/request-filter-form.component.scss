@@ -1,0 +1,58 @@
+// Filter form layout. RTL-aware: logical properties only, no fixed left/right.
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.1rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-inline-size: 12rem;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--app-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__tag {
+    margin-inline-end: 0.25rem;
+  }
+
+  &__error {
+    flex-basis: 100%;
+    margin-block: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--p-red-500, #d32f2f);
+    font-size: 0.85rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-inline-start: auto;
+  }
+}
+
+@media (max-inline-size: 768px) {
+  .filter-form {
+    gap: 0.75rem;
+
+    &__field {
+      flex: 1 1 100%;
+      min-inline-size: 0;
+    }
+
+    &__actions {
+      flex: 1 1 100%;
+      margin-inline-start: 0;
+    }
+  }
+}

@@ -1,0 +1,79 @@
+// Results table layout. RTL-aware: logical properties only, no fixed left/right.
+.results-table {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  // Rounded, bordered container around the PrimeNG table for a bold, card-like look.
+  ::ng-deep .p-datatable {
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-sm);
+    overflow: hidden;
+
+    .p-datatable-thead > tr > th {
+      background: color-mix(in srgb, var(--app-accent) 6%, var(--app-surface));
+      border-block-end: 1px solid var(--app-border);
+      padding-block: 0.85rem;
+      color: var(--app-text);
+    }
+
+    .p-datatable-tbody > tr {
+      transition: background-color 0.12s ease;
+
+      > td {
+        padding-block: 0.85rem;
+        border-block-end: 1px solid color-mix(in srgb, var(--app-border) 60%, transparent);
+        color: var(--app-text);
+      }
+
+      &:hover > td {
+        background: color-mix(in srgb, var(--app-accent) 4%, var(--app-surface));
+      }
+
+      &:last-child > td {
+        border-block-end: none;
+      }
+    }
+  }
+
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    inline-size: 100%;
+    padding-block: 0.15rem;
+    padding-inline: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: inherit;
+    text-align: start;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--app-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--app-accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  }
+
+  &__sort-icon {
+    font-size: 0.7rem;
+    margin-inline-start: auto;
+    opacity: 0.75;
+  }
+
+  &__load-more {
+    display: flex;
+    justify-content: center;
+  }
+}

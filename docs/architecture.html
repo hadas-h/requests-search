@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>חלק ב' — תכנון ארכיטקטורה: מעבר ל-Microservices</title>
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --ink: #1f2733;
+    --muted: #5b6775;
+    --accent: #2563eb;
+    --accent-soft: #eaf1ff;
+    --border: #e3e8ef;
+    --ok: #0f9d58;
+    --warn: #b45309;
+    --warn-soft: #fff7e8;
+    --code-bg: #0f172a;
+    --shadow: 0 1px 2px rgba(16,24,40,.06), 0 8px 24px rgba(16,24,40,.06);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", "Rubik", "Assistant", system-ui, -apple-system, Arial, sans-serif;
+    line-height: 1.75;
+    font-size: 16.5px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 22px 80px; }
+
+  header.hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #3b82f6 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 34px 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+  }
+  header.hero h1 { margin: 0 0 10px; font-size: 1.9rem; letter-spacing: -.3px; }
+  header.hero p { margin: 0; opacity: .92; font-size: 1.02rem; }
+  .pills { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.28);
+    color: #fff; padding: 4px 12px; border-radius: 999px; font-size: .82rem;
+    backdrop-filter: blur(2px);
+  }
+
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 30px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  h2 {
+    font-size: 1.35rem; margin: 0 0 6px;
+    padding-bottom: 10px; border-bottom: 2px solid var(--accent-soft);
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .num {
+    background: var(--accent); color: #fff; font-size: .9rem;
+    width: 30px; height: 30px; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+  }
+  h3 { font-size: 1.05rem; margin: 24px 0 8px; color: var(--ink); }
+  p { margin: 12px 0; color: var(--ink); }
+  .lead { color: var(--muted); }
+  strong { color: #111827; font-weight: 700; }
+
+  .principle {
+    background: var(--accent-soft);
+    border-inline-start: 4px solid var(--accent);
+    border-radius: 10px; padding: 12px 16px; margin: 16px 0;
+  }
+
+  .diagram {
+    background: #fbfcfe; border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px; margin: 18px 0; text-align: center; overflow-x: auto;
+  }
+  .diagram .cap { color: var(--muted); font-size: .85rem; margin-top: 8px; }
+  .mermaid { display: flex; justify-content: center; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .96rem; }
+  th, td { text-align: start; padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: #f1f5fb; color: #334155; font-weight: 700; }
+  tr:last-child td { border-bottom: none; }
+  td code, p code, li code {
+    background: #eef2f7; color: #0f172a; padding: 1px 6px; border-radius: 5px;
+    font-family: "Consolas", "SFMono-Regular", monospace; font-size: .9em;
+    direction: ltr; display: inline-block;
+  }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 18px 0; }
+  .svc {
+    border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: #fcfdff;
+  }
+  .svc h4 { margin: 0 0 6px; color: var(--accent); font-size: 1rem; }
+  .svc .db { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+  .svc .db code { font-size: .82em; }
+
+  ul.benefits { margin: 12px 0; padding-inline-start: 0; list-style: none; }
+  ul.benefits li { margin: 8px 0; padding-inline-start: 26px; position: relative; }
+  ul.benefits li::before {
+    content: "✓"; position: absolute; inset-inline-start: 0; top: 0;
+    color: var(--ok); font-weight: 800;
+  }
+
+  .callout {
+    border-radius: 10px; padding: 12px 16px; margin: 14px 0; font-size: .95rem;
+    background: #fffdf5; border-inline-start: 4px solid var(--warn); color: #40321a;
+  }
+  .callout.note { background: #f3f8ff; border-inline-start-color: var(--accent); color: #1e293b; }
+  .callout b { color: #111827; }
+
+  .fail th:first-child { width: 34%; }
+  .fail td:first-child { font-weight: 700; color: var(--warn); }
+
+  .bottomline {
+    background: linear-gradient(135deg, #ecfdf5, #e0f2fe);
+    border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px 20px; margin-top: 18px;
+  }
+  .optional-note {
+    font-size: .9rem; color: var(--muted);
+    background: #f8fafc; border: 1px dashed var(--border); border-radius: 10px;
+    padding: 10px 14px; margin: 14px 0;
+  }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 30px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>חלק ב' — תכנון ארכיטקטורה: מעבר ל-Microservices</h1>
+    <p>מסמך קצר העונה על שתי שאלות: (1) חלוקה אפשרית ל-Microservices והתועלות; (2) כיצד לתכנן תקשורת אמינה לתרחיש ה-Notification כשהשירות עלול להיות זמנית לא זמין.</p>
+    <div class="pills">
+      <span class="pill">Bounded Contexts</span>
+      <span class="pill">Database per Service</span>
+      <span class="pill">Transactional Outbox</span>
+      <span class="pill">RabbitMQ</span>
+      <span class="pill">Idempotency</span>
+      <span class="pill">Retry / DLQ</span>
+    </div>
+  </header>
+
+  <div class="principle">
+    <strong>עיקרון מנחה:</strong> לפרק לפי <strong>Bounded Contexts</strong> (אחריות עסקית) — לא לפי שכבות טכניות. שירות שמתפרק נכון אפשר לפתח, לפרוס ולהגדיל (scale) בנפרד.
+  </div>
+
+  <!-- ===================== PART 1 ===================== -->
+  <section class="card">
+    <h2><span class="num">1</span> Architecture Overview</h2>
+
+    <div class="diagram">
+      <pre class="mermaid">
+graph TD
+    FE["🖥️ Angular SPA"] --> GW["API Gateway<br/>routing, authentication"]
+    GW --> REQ["Requests Service"]
+    GW --> IDN["Identity Service"]
+
+    REQ -->|"TX: Request + event"| REQDB[("Requests DB<br/>+ Outbox table")]
+    IDN --- IDNDB[("Identity DB")]
+
+    PUB["Outbox Publisher<br/>background worker"] -->|"reads unpublished"| REQDB
+    PUB -->|"publishes"| MQ[("RabbitMQ")]
+    MQ --> NOTIF["Notification Service"]
+    NOTIF --> EXT["📧 Email / SMS provider"]
+    NOTIF --- NOTIFDB[("Notification DB")]
+
+    classDef svc fill:#eaf1ff,stroke:#2563eb,stroke-width:1.5px,color:#1e293b;
+    classDef infra fill:#fef3c7,stroke:#b45309,color:#40321a;
+    classDef db fill:#f1f5f9,stroke:#64748b,color:#334155;
+    class FE,GW,REQ,IDN,NOTIF svc;
+    class MQ,PUB,EXT infra;
+    class REQDB,IDNDB,NOTIFDB db;
+      </pre>
+      <div class="cap">ה-<strong>Outbox Publisher קורא</strong> את ה-events מטבלת ה-Outbox ומפרסם ל-RabbitMQ — ה-DB עצמו אינו "שולח" הודעות.</div>
+    </div>
+
+    <div class="optional-note">
+      <strong>Analytics / Stats service — optional:</strong> יחולץ ל-read-model נפרד רק אם עומס האנליטיקה יצדיק הפרדה. עד אז נשאר בתוך Requests Service.
+    </div>
+
+    <h3>חלוקת השירותים</h3>
+    <div class="cards">
+      <div class="svc"><h4>Requests</h4><div>יצירה, עדכון, וחיפוש/סינון של Requests (ה-core).</div><div class="db">DB: Requests + טבלת <code>Outbox</code></div></div>
+      <div class="svc"><h4>Identity</h4><div>משתמשים, Authentication, הנפקת/אימות JWT, הרשאות.</div><div class="db">DB: Identity</div></div>
+      <div class="svc"><h4>Notification</h4><div>שליחת Notifications (email/SMS), retry וניהול כשלים.</div><div class="db">DB: Notification</div></div>
+      <div class="svc"><h4>API Gateway</h4><div>נקודת כניסה אחת: routing ו-authentication (ובהמשך גם cross-cutting כמו rate-limiting).</div><div class="db">stateless</div></div>
+    </div>
+
+    <div class="callout note">
+      <b>Database per service</b> — לכל שירות ה-DB שלו, ואין גישה ישירה ל-DB של שירות אחר. שיתוף מידע נעשה דרך API או events בלבד.
+    </div>
+
+    <h3>תועלות</h3>
+    <ul class="benefits">
+      <li><strong>Scaling ממוקד</strong> — מגדילים רק את Requests (עומס החיפוש) בלי להכפיל את Identity/Notification.</li>
+      <li><strong>Fault isolation</strong> — נפילת Notification לא מונעת יצירת Request (ראו חלק 2).</li>
+      <li><strong>Deploy עצמאי</strong> — כל צוות משחרר בנפרד, בלי תיאום deploy.</li>
+      <li><strong>הרחבה בלי לגעת ב-core</strong> — צרכן events חדש (למשל Audit) לא דורש שינוי ב-Requests.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== PART 2 ===================== -->
+  <section class="card">
+    <h2><span class="num">2</span> Reliable Notification</h2>
+
+    <p><strong>הדרישה:</strong> כש-Request נוצר או משנה Status → לשלוח Notification, ושירות ה-Notification עלול להיות זמנית לא זמין.</p>
+
+    <div class="principle">
+      <strong>העיקרון:</strong> המטרה היא ש<strong>יצירת/עדכון Request לא תהיה תלויה בזמינות Notification</strong>. לכן Requests <strong>לא קורא ל-Notification סינכרונית</strong> — אלא מפרסם event, ו-Notification צורך אותו בזמנו שלו. ה-broker סופג את חוסר-הזמינות.
+    </div>
+
+    <p>הנקודה המרכזית נראית ישירות בתרשים: ה-Request וה-event נשמרים <strong>באותה טרנזקציה</strong>, התגובה ללקוח אינה תלויה בזמינות Notification, וה-Outbox Publisher מפרסם משם והלאה.</p>
+
+    <div class="diagram">
+      <pre class="mermaid">
+sequenceDiagram
+    actor U as User
+    participant R as Requests Service
+    participant DB as Requests DB + Outbox
+    participant P as Outbox Publisher
+    participant MQ as RabbitMQ
+    participant N as Notification Service
+    participant EXT as Email / SMS
+
+    U->>R: Create / Change Status
+    rect rgb(234, 241, 255)
+    Note over R,DB: SAME TRANSACTION (atomic)
+    R->>DB: save Request
+    R->>DB: save Outbox event
+    DB-->>R: commit
+    end
+    R-->>U: Success (2xx)  (does not depend on Notification)
+
+    P->>DB: read unpublished events
+    P->>MQ: publish
+    MQ->>N: deliver (at-least-once)
+    N->>N: dedup by eventId (idempotent)
+    N->>EXT: send notification
+    Note over N,EXT: on failure: retry/backoff → DLQ
+      </pre>
+      <div class="cap">שמירה אטומית של Request + event ב-Outbox → Publisher מפרסם ל-RabbitMQ → Notification צורך; אם לא זמין, ה-event נשאר ב-broker עד שיחזור.</div>
+    </div>
+
+    <h3>למה זה אמין בכשלים השונים</h3>
+    <table class="fail">
+      <thead><tr><th>כשל</th><th>מה קורה</th></tr></thead>
+      <tbody>
+        <tr><td>Notification down</td><td>ה-events מצטברים ב-RabbitMQ; יצירת ה-Request מצליחה; ההתראות נשלחות כש-Notification חוזר.</td></tr>
+        <tr><td>RabbitMQ down</td><td>ה-event נשאר ב-<strong>Outbox</strong>; ה-Publisher מפרסם אותו כש-ה-broker חוזר. ה-Request אינו תלוי בזמינות ה-broker.</td></tr>
+        <tr><td>Redelivery (at-least-once)</td><td>ה-idempotency מזהה event שכבר טופל → אין שליחה כפולה.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout note">
+      <b>Dual-write:</b> בלי Outbox אי אפשר לשמור ל-DB ולפרסם ל-broker אטומית — crash בין השניים גורם ל-Request בלי event או להפך. ה-Outbox פותר זאת בכך שהפרסום נגזר משורת DB שנשמרה באותה טרנזקציה.
+    </div>
+    <div class="callout">
+      <b>ספק חיצוני:</b> מול ה-email/SMS provider אפשר להחיל resilience policies — timeout, retry with backoff, ו-circuit breaker — אבל זה concern משני, לא מרכז הפתרון.
+    </div>
+
+    <div class="bottomline">
+      <strong>השורה התחתונה:</strong> יצירת/עדכון Request אינה תלויה בזמינות של Notification. השילוב <strong>Outbox + Broker + Idempotency + Retry/DLQ</strong> מונע אובדן events בתרחישי כשל זמניים, בכפוף לעמידות ולתצורה של ה-DB וה-broker (DR, גיבויים, ו-monitoring ל-DLQ נותרים concern נפרד).
+    </div>
+  </section>
+
+  <!-- ===================== PART 3 ===================== -->
+  <section class="card">
+    <h2><span class="num">3</span> Trade-offs</h2>
+    <p>Microservices מאפשרים scaling ו-deployment עצמאיים ו-fault isolation, אך מוסיפים מורכבות תפעולית, תקשורת רשת, eventual consistency וקושי ב-debugging מבוזר. לכן הייתי מפריד שירותים לפי גבולות עסקיים ברורים ולא מפרק את המערכת ללא צורך — ומתחיל בחילוץ הדרגתי (<strong>Notification תחילה</strong>, הגבול הברור ביותר), לא ב-big-bang.</p>
+  </section>
+
+  <!-- ===================== PART 4 ===================== -->
+  <section class="card">
+    <h2><span class="num">4</span> Messaging Decision</h2>
+    <p>בחרתי ב-<strong>RabbitMQ</strong> כדוגמה ל-message broker משום שהתרחיש דורש reliable asynchronous messaging עם queues, retry ו-DLQ.</p>
+    <table>
+      <thead><tr><th>אפשרות</th><th>מתי מתאים</th></tr></thead>
+      <tbody>
+        <tr><td><strong>RabbitMQ</strong></td><td>Work-queue אמין עם retry ו-DLQ מובנים — התאמה ישירה לתרחיש.</td></tr>
+        <tr><td><strong>Kafka</strong></td><td>Event streaming ו-replay בהיקפים גבוהים (וגם אם Analytics יצרוך את אותם events).</td></tr>
+        <tr><td><strong>Azure Service Bus / Amazon SQS</strong></td><td>כשהמערכת כבר מבוססת Azure / AWS בהתאמה.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>Requests Search &amp; Filtering · Part B — Architecture Design</footer>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#eaf1ff',
+      primaryBorderColor: '#2563eb',
+      primaryTextColor: '#1e293b',
+      lineColor: '#64748b',
+      fontFamily: 'Segoe UI, Rubik, Assistant, system-ui, sans-serif',
+      fontSize: '15px'
+    },
+    sequence: { useMaxWidth: true, mirrorActors: false },
+    flowchart: { useMaxWidth: true, htmlLabels: true }
+  });
+</script>
+</body>
+</html>

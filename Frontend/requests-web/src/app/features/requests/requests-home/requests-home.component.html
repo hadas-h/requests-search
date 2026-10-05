@@ -1,0 +1,16 @@
+<p-tabs [value]="activeTab()" (valueChange)="activeTab.set($any($event))">
+  <p-tablist>
+    <p-tab [value]="searchTab">{{ 'Tabs.search' | translate }}</p-tab>
+    <p-tab [value]="overviewTab">{{ 'Tabs.overview' | translate }}</p-tab>
+  </p-tablist>
+
+  <p-tabpanels>
+    <p-tabpanel [value]="searchTab">
+      <app-search-page [drillFilter]="drillFilter()" />
+    </p-tabpanel>
+
+    <p-tabpanel [value]="overviewTab">
+      <app-requests-dashboard (drillStatus)="onDrill($event)" (drillType)="onDrill($event)" />
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

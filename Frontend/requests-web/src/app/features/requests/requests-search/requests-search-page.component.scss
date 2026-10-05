@@ -1,0 +1,94 @@
+// Search page layout. RTL-aware: logical properties only, no fixed left/right.
+.search-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+// Elevated surface used for the filter form and the results region.
+.search-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  box-shadow: var(--app-shadow);
+  padding: 1.25rem 1.5rem;
+
+  &--filter {
+    // Let the filter form breathe without an extra inner wrapper.
+    padding-block: 1rem;
+  }
+}
+
+.search-page {
+  &__state {
+    // Reserve vertical space so the layout never collapses between states.
+    min-block-size: 16rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  // Keeps the table mounted while a non-blocking overlay is shown on top.
+  &__results {
+    position: relative;
+    margin-block: -0.25rem;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--app-surface) 55%, transparent);
+    backdrop-filter: blur(1px);
+    border-radius: var(--app-radius-sm);
+    z-index: 1;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__loading-caption {
+    margin-block-start: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  &__skeleton-row {
+    inline-size: 100%;
+    border-radius: var(--app-radius-sm);
+  }
+
+  &__error,
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding-block: 2.5rem;
+    text-align: center;
+  }
+
+  &__state-icon {
+    font-size: 2.5rem;
+    color: var(--app-text-muted);
+    opacity: 0.7;
+  }
+
+  &__message {
+    margin-block: 0;
+    font-size: 1rem;
+    color: var(--app-text-muted);
+  }
+}
+
+@media (max-inline-size: 768px) {
+  .search-card {
+    padding-inline: 1rem;
+  }
+}

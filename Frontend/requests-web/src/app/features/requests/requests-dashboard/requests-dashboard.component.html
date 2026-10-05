@@ -1,0 +1,61 @@
+<section class="dashboard">
+  @if (loading()) {
+    <div class="dashboard__loading">
+      <p-skeleton height="8rem" />
+      <p-skeleton height="18rem" />
+    </div>
+  } @else if (failed()) {
+    <div class="dashboard__error" role="alert">
+      <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+      <span>{{ 'Dashboard.error' | translate }}</span>
+    </div>
+  } @else {
+    <!-- KPI cards -->
+    <div class="dashboard__kpis">
+      <div class="kpi kpi--total">
+        <span class="kpi__label">{{ 'Dashboard.total' | translate }}</span>
+        <span class="kpi__value">{{ total() }}</span>
+      </div>
+      <div class="kpi kpi--open">
+        <span class="kpi__label">{{ 'Dashboard.open' | translate }}</span>
+        <span class="kpi__value">{{ openCount() }}</span>
+      </div>
+      <div class="kpi kpi--closed">
+        <span class="kpi__label">{{ 'Dashboard.closed' | translate }}</span>
+        <span class="kpi__value">{{ closedCount() }}</span>
+      </div>
+      <div class="kpi kpi--pct">
+        <span class="kpi__label">{{ 'Dashboard.completionPct' | translate }}</span>
+        <span class="kpi__value">{{ completionPct() }}%</span>
+      </div>
+    </div>
+
+    <!-- Progress: completed out of total -->
+    <div class="dashboard__progress">
+      <div class="dashboard__progress-head">
+        <span>{{ 'Dashboard.completed' | translate }}: {{ completedCount() }}</span>
+        <span>{{ 'Dashboard.remaining' | translate }}: {{ total() - completedCount() }}</span>
+      </div>
+      <p-progressBar [value]="completionPct()" />
+    </div>
+
+    <!-- Charts -->
+    <div class="dashboard__charts">
+      <div class="dashboard__chart-card">
+        <h2 class="dashboard__chart-title">{{ 'Dashboard.byStatus' | translate }}</h2>
+        <p class="dashboard__chart-hint">{{ 'Dashboard.clickHint' | translate }}</p>
+        <div class="dashboard__chart">
+          <p-chart type="doughnut" [data]="statusChart()" [options]="statusOptions" />
+        </div>
+      </div>
+
+      <div class="dashboard__chart-card">
+        <h2 class="dashboard__chart-title">{{ 'Dashboard.byType' | translate }}</h2>
+        <p class="dashboard__chart-hint">{{ 'Dashboard.clickHint' | translate }}</p>
+        <div class="dashboard__chart">
+          <p-chart type="doughnut" [data]="typeChart()" [options]="typeOptions" />
+        </div>
+      </div>
+    </div>
+  }
+</section>

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+// Only the active panel is shown; never override the [hidden] attribute the Tabs component sets.
+p-tabpanel:not([hidden]) {
+  display: block;
+  padding-block-start: 1.25rem;
+}

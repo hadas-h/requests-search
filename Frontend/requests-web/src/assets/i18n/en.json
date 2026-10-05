@@ -1,0 +1,77 @@
+{
+  "App": {
+    "title": "Requests",
+    "titleMyRequests": "My Requests"
+  },
+  "Columns": {
+    "requestNumber": "Request Number",
+    "status": "Status",
+    "requestType": "Request Type",
+    "createdAt": "Created At"
+  },
+  "Dashboard": {
+    "byStatus": "Requests by Status",
+    "byType": "Requests by Type",
+    "clickHint": "Click a slice to filter the table",
+    "closed": "Closed",
+    "completed": "Completed",
+    "completionPct": "Completion Rate",
+    "empty": "No data to display",
+    "error": "Failed to load dashboard data",
+    "loading": "Loading data...",
+    "open": "Open",
+    "remaining": "Remaining",
+    "total": "Total Requests"
+  },
+  "Status": {
+    "New": "New",
+    "InProgress": "In Progress",
+    "Completed": "Completed",
+    "Cancelled": "Cancelled"
+  },
+  "RequestType": {
+    "General": "General",
+    "Legal": "Legal",
+    "Payment": "Payment",
+    "Appeal": "Appeal"
+  },
+  "Filter": {
+    "requestNumber": "Request Number",
+    "status": "Status",
+    "requestType": "Request Type",
+    "createdFrom": "From Date",
+    "createdTo": "To Date",
+    "search": "Search",
+    "clear": "Clear",
+    "dateRangeInvalid": "The start date must be earlier than or equal to the end date"
+  },
+  "Sort": {
+    "sortBy": "Sort by",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
+  "State": {
+    "loading": "Loading...",
+    "empty": "No requests found",
+    "error": "An error occurred while loading requests",
+    "retry": "Retry",
+    "loadMore": "Load more"
+  },
+  "Tabs": {
+    "overview": "Overview",
+    "search": "Search Requests"
+  },
+  "Auth": {
+    "loginTitle": "Sign In",
+    "registerTitle": "Register",
+    "username": "Username",
+    "password": "Password",
+    "login": "Sign In",
+    "register": "Register",
+    "toggleToRegister": "Don't have an account? Register",
+    "toggleToLogin": "Already have an account? Sign in",
+    "greeting": "Hello",
+    "logout": "Sign Out",
+    "adminNotice": "Signed in as administrator — showing requests of all customers"
+  }
+}

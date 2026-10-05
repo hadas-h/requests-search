@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# .gitignore for the CandidateTest solution.
+# Backend (.NET) build output and IDE artifacts are ignored here.
+# The Angular frontend has its own .gitignore under Frontend/requests-web/
+# (covers node_modules, .angular/cache, dist, etc.).
+# ---------------------------------------------------------------------------
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+artifacts/
+
+# Visual Studio / Rider / VS Code workspace artifacts
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+.idea/
+
+# Test & coverage results
+[Tt]est[Rr]esult*/
+[Cc]overage*/
+*.coverage
+*.coveragexml
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/build/
+
+# Build / rebuild logs
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# OS files
+.DS_Store
+Thumbs.db
